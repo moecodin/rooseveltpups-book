@@ -1,75 +1,108 @@
 <!--
-  The sign-in code email. Paste this whole file into BOTH Supabase templates:
-  Authentication → Emails → Templates → "Magic Link" and "Confirm signup".
-  Subject for both: Your Roosevelt Pups code: {{ .Token }}
-
-  Built for email: tables and inline styles, because many email apps ignore
-  anything else. The logo is text (not a picture), so it shows even when the
-  email app blocks images. {{ .Token }} and {{ .Email }} are filled in by Supabase.
+  The sign-in code email (the playful version). It's pasted into BOTH Supabase
+  templates: Authentication → Emails → Templates → "Magic Link" and "Confirm signup".
+  The confirmed and declined emails (staff repo:
+  supabase/functions/send-booking-email/index.ts) use the same look.
+  {{ .Token }} and {{ .Email }} are filled in by Supabase.
 -->
 <!doctype html>
-<html lang="en">
+<html lang="en" xmlns="http://www.w3.org/1999/xhtml">
 <head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="color-scheme" content="light">
-<meta name="supported-color-schemes" content="light">
-<title>Your Roosevelt Pups code</title>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <meta name="color-scheme" content="light">
+  <meta name="supported-color-schemes" content="light">
+  <title>Your Roosevelt Pups Code</title>
+  <style>
+    body, table, td, a { -webkit-text-size-adjust: 100%; -ms-text-size-adjust: 100%; }
+    table, td { mso-table-lspace: 0pt; mso-table-rspace: 0pt; }
+    body { height: 100% !important; margin: 0 !important; padding: 0 !important; width: 100% !important; }
+
+    .font-sans {
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Helvetica, Arial, sans-serif;
+    }
+    .font-code {
+      font-family: ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, 'Liberation Mono', 'Courier New', monospace;
+    }
+  </style>
 </head>
-<body style="margin:0; padding:0; background:#e2e8ef;">
-  <!-- Preview text shown next to the subject in the inbox -->
-  <div style="display:none; max-height:0; overflow:hidden; opacity:0;">Your code is {{ .Token }}. It works for 10 minutes.</div>
+<body style="margin: 0; padding: 0; background-color: #fcefe6; -webkit-font-smoothing: antialiased;">
 
-  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#e2e8ef;">
+  <!-- Preheader -->
+  <div style="display: none; max-height: 0px; overflow: hidden; opacity: 0; font-size: 1px; line-height: 1px; color: #ffffff;">
+    Woof! Here is your secret code {{ .Token }}. Fetch it before it expires!
+  </div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background-color: #fcefe6;">
     <tr>
-      <td align="center" style="padding:32px 16px;">
-        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:460px; background:#ffffff; border-radius:16px; border:1px solid #d5dde7;">
+      <td align="center" style="padding: 40px 16px;">
 
-          <!-- Logo, written out in the logo's colors -->
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width: 460px; background-color: #ffffff; border-radius: 24px; border: 2px solid #fcd34d; box-shadow: 0 10px 25px -5px rgba(226, 38, 44, 0.08);">
+
+          <!-- Header -->
           <tr>
-            <td align="center" style="padding:28px 24px 8px; font-family:Arial, Helvetica, sans-serif;">
-              <div style="font-size:26px; font-weight:bold; letter-spacing:1px; color:#0d2e43; line-height:1;">R<span style="color:#e2262c;">OO</span>SEVELT</div>
-              <div style="font-size:13px; font-weight:bold; letter-spacing:9px; color:#e2262c; padding-top:4px; padding-left:9px;">PUPS</div>
+            <td align="center" class="font-sans" style="padding: 36px 32px 8px;">
+              <div style="font-size: 26px; font-weight: 900; letter-spacing: 1px; color: #0d2e43; line-height: 1;">
+                R<span style="color: #e2262c;">OO</span>SEVELT
+              </div>
+              <div style="font-size: 12px; font-weight: 800; letter-spacing: 8px; color: #e2262c; padding-top: 6px; padding-left: 8px;">
+                PUPS
+              </div>
             </td>
           </tr>
 
+          <!-- Heading -->
           <tr>
-            <td align="center" style="padding:16px 28px 4px; font-family:Arial, Helvetica, sans-serif; color:#1b2838;">
-              <div style="font-size:20px; font-weight:bold;">Here's your sign-in code</div>
-              <div style="font-size:15px; color:#5e6a7d; padding-top:6px; line-height:1.45;">Type it on the booking page to continue.</div>
+            <td align="center" class="font-sans" style="padding: 12px 32px 0;">
+              <h1 style="margin: 0; font-size: 22px; font-weight: 800; color: #0d2e43; letter-spacing: -0.2px;">
+                Ready to fetch your code?
+              </h1>
+              <p style="margin: 8px 0 0; font-size: 15px; color: #52525b; line-height: 1.5;">
+                Enter this code on the booking page to finish signing in.
+              </p>
             </td>
           </tr>
 
-          <!-- The code -->
+          <!-- Code Box -->
           <tr>
-            <td align="center" style="padding:20px 28px;">
-              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+            <td align="center" style="padding: 24px 32px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0" style="width: 100%;">
                 <tr>
-                  <td align="center" style="background:#f3f6f9; border:1px solid #d5dde7; border-radius:12px; padding:16px 16px 16px 26px; font-family:'Courier New', Courier, monospace; font-size:34px; font-weight:bold; letter-spacing:10px; color:#0d2e43;">{{ .Token }}</td>
+                  <td align="center" class="font-code" style="background-color: #fffbeeb0; border: 2px dashed #f59e0b; border-radius: 16px; padding: 18px 12px; font-size: 34px; font-weight: 800; letter-spacing: 10px; color: #e2262c; text-indent: 10px;">
+                    {{ .Token }}
+                  </td>
                 </tr>
               </table>
-              <div style="font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#5e6a7d; padding-top:12px;">It works for 10 minutes.</div>
+              <p class="font-sans" style="margin: 12px 0 0; font-size: 13px; font-weight: 600; color: #d97706;">
+                ⏰ Quick! This code self-destructs in <strong>10 minutes</strong>.
+              </p>
             </td>
           </tr>
 
+          <!-- Security Note -->
           <tr>
-            <td style="padding:4px 28px 24px; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#5e6a7d; line-height:1.5; text-align:center;">
-              We sent this to {{ .Email }}. Didn't ask for a code? You can ignore this email; nobody can sign in without it.
+            <td class="font-sans" style="padding: 0 32px 28px; font-size: 13px; color: #71717a; line-height: 1.5; text-align: center;">
+              We sniffed out this request for <strong style="color: #3f3f46;">{{ .Email }}</strong>.<br>
+              Didn't request it? No worries! You can ignore this email.
             </td>
           </tr>
 
           <!-- Footer -->
           <tr>
-            <td style="border-top:1px solid #e1e7ee; padding:18px 28px 24px; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#5e6a7d; line-height:1.6; text-align:center;">
-              <strong style="color:#0d2e43;">Roosevelt Pups</strong><br>
+            <td class="font-sans" style="border-top: 1px solid #fecdd3; background-color: #fff1f2; border-bottom-left-radius: 22px; border-bottom-right-radius: 22px; padding: 20px 32px; font-size: 12px; color: #9f1239; line-height: 1.6; text-align: center;">
+              <strong style="color: #be123c; font-size: 13px;">Roosevelt Pups</strong><br>
               544 Main Street, Roosevelt Island, NY 10044<br>
-              <a href="tel:+12123718901" style="color:#0d2e43; text-decoration:none;">(212) 371-8901</a> ·
-              <a href="mailto:info@rooseveltpups.com" style="color:#0d2e43; text-decoration:none;">info@rooseveltpups.com</a>
+              <a href="tel:+12123718901" style="color: #be123c; text-decoration: underline;">(212) 371-8901</a> &bull;
+              <a href="mailto:info@rooseveltpups.com" style="color: #be123c; text-decoration: underline;">info@rooseveltpups.com</a>
             </td>
           </tr>
+
         </table>
+
       </td>
     </tr>
   </table>
+
 </body>
 </html>
