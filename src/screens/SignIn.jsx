@@ -38,8 +38,8 @@ export default function SignIn({ onSendCode, onVerify, onDone }) {
 
   const checkCode = async (e) => {
     e.preventDefault()
-    if (!/^\d{6}$/.test(code)) {
-      setError('Enter the 6 numbers from the email.')
+    if (!/^\d{6,10}$/.test(code)) {
+      setError('Enter all the numbers from the email.')
       return
     }
     setBusy(true)
@@ -71,11 +71,12 @@ export default function SignIn({ onSendCode, onVerify, onDone }) {
             className="form-control code-input"
             inputMode="numeric"
             autoComplete="one-time-code"
-            maxLength={6}
+            maxLength={10}
             autoFocus
             value={code}
             onChange={(e) => {
-              setCode(e.target.value.replace(/\D/g, '').slice(0, 6))
+              // Supabase's code length is a setting (6 to 10); 6 is what clients are told.
+              setCode(e.target.value.replace(/\D/g, '').slice(0, 10))
               setError('')
             }}
           />

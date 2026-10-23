@@ -2,7 +2,7 @@ import { useState } from 'react'
 import FilePick from '../components/FilePick.jsx'
 import { PHONE, PHONE_HREF } from '../lib/contact.js'
 import { addDays, BOOK_AHEAD_DAYS, dayParts, formatLong, formatTime, fromKey, todayKey } from '../lib/dates.js'
-import { A_LA_CARTE, CUT_STYLES, MAIN_CHOICES, formatPrice, serviceSummary, toBooking } from '../lib/services.js'
+import { A_LA_CARTE, CUT_STYLES, MAIN_CHOICES, QUICK_PRICES, formatPrice, serviceSummary, toBooking } from '../lib/services.js'
 
 const STEPS = ['Service', 'Day and time', 'Details', 'Review']
 
@@ -109,7 +109,7 @@ export default function Book({ account, timesFor, onSend, onCancel }) {
         <>
           <h2 className="title">Anything we should know?</h2>
           <p className="sub">Optional. Flor reads this before your visit.</p>
-          <label className="form-label" htmlFor="note">Notes for Flor</label>
+          <label className="form-label" htmlFor="note">Notes for Flor (your groomer)</label>
           <textarea id="note" className="form-control mb-1" rows={4} maxLength={500} value={note} onChange={(e) => setNote(e.target.value)} />
           <p className="form-text mb-3">For example: a mat behind the ears, nervous around dryers, a special shampoo.</p>
           <FilePick id="visit-photo" label="A recent photo (optional)" hint="Show us the look you'd like, or a spot to check." accept="image/*" file={photo} onPick={setPhoto} />
@@ -205,7 +205,7 @@ function ServiceStep({ pups, chosen, choices, onToggle, onChoice }) {
                         aria-pressed={!!on}
                         onClick={() => onChoice(id, { quick: on ? choice.quick.filter((q) => q !== value) : [...(choice.quick || []), value] })}
                       >
-                        {label}
+                        {label} · {formatPrice(QUICK_PRICES[value])}
                       </button>
                     )
                   })}
@@ -221,30 +221,45 @@ function ServiceStep({ pups, chosen, choices, onToggle, onChoice }) {
 
 function WhenStep({ picks, timesFor, date, time, flexible, onDate, onTime, onFlexible }) {
   const today = todayKey()
-  const weeks = buildWeeks(today, picks, timesFor)
+  const first = addDays(today, 1)
+  const last = addDays(today, BOOK_AHEAD_DAYS)
+  const [month, setMonth] = useState(() => (date ?? first).slice(0, 7)) // "2026-11"
   const offered = date ? timesFor(date, picks).times : []
+  const soonest = soonestSpots(first, last, picks, timesFor, 3)
+  const pick = (d, t) => {
+    onDate(d)
+    onTime(t)
+  }
 
   return (
     <>
       <h2 className="title">When works for you?</h2>
       <p className="sub">Drop-off between 9am and 1pm. We'll confirm by email.</p>
-      {weeks.map((week) => (
-        <div key={week.label}>
-          <p className="week-label">{week.label}</p>
-          <div className="week">
-            {week.days.map((d) => {
-              const { day, date: num } = dayParts(d.key)
-              return (
-                <button key={d.key} type="button" className={`day ${date === d.key ? 'on' : ''}`} disabled={!d.open} aria-pressed={date === d.key} onClick={() => onDate(d.key)} aria-label={`${formatLong(d.key)}${d.open ? '' : `, ${d.note}`}`}>
-                  <small>{day}</small>
-                  <b>{num}</b>
-                  <small>{d.note || ' '}</small>
-                </button>
-              )
-            })}
-          </div>
+
+      {soonest.length > 0 && (
+        <div className="soonest">
+          {soonest.map((s, i) => (
+            <button key={s.date} type="button" className={`soon ${date === s.date && time === s.time ? 'on' : ''}`} aria-pressed={date === s.date && time === s.time} onClick={() => pick(s.date, s.time)}>
+              <span>
+                <small>{i === 0 ? 'Soonest' : 'Next'}</small>
+                {formatShortDay(s.date)}
+              </span>
+              <b>{formatTime(s.time)}</b>
+            </button>
+          ))}
         </div>
-      ))}
+      )}
+      <div className="or">or pick a day</div>
+
+      <MonthCalendar
+        month={month}
+        onMonth={setMonth}
+        first={first}
+        last={last}
+        selected={date}
+        isOpen={(key) => timesFor(key, picks).status === 'ok'}
+        onPick={onDate}
+      />
 
       {date && (
         <>
@@ -277,30 +292,86 @@ function WhenStep({ picks, timesFor, date, time, flexible, onDate, onTime, onFle
       </div>
 
       <p className="call-note">
-        Don't see the time you want? Please call us at <a href={PHONE_HREF}>{PHONE}</a>. We try to keep things fair for everyone, and we'll do our best to fit you in depending on who's already booked that day.
+        Don't see the time you need? Call us at <a href={PHONE_HREF}>{PHONE}</a> and we'll see what we can do.
       </p>
     </>
   )
 }
 
-// Weeks of Tuesday-to-Saturday buttons, from this week to 8 weeks out.
-function buildWeeks(today, picks, timesFor) {
-  const last = addDays(today, BOOK_AHEAD_DAYS)
-  // This week's Tuesday; on a Sunday or Monday, the coming one.
-  const weekday = fromKey(today).getDay()
-  const weeks = []
-  for (let tuesday = addDays(today, 2 - weekday); tuesday <= last; tuesday = addDays(tuesday, 7)) {
-    const days = [0, 1, 2, 3, 4].map((i) => {
-      const key = addDays(tuesday, i)
-      if (key <= today) return { key, open: false, note: key === today ? 'Call' : '' }
-      if (key > last) return { key, open: false, note: '' }
-      const { status } = timesFor(key, picks)
-      return { key, open: status === 'ok', note: status === 'ok' ? '' : status === 'closed' ? 'Closed' : 'Full' }
-    })
-    const first = dayParts(tuesday)
-    weeks.push({ label: `Week of ${first.month} ${first.date}`, days })
+// The next few open spots: the first offered time on each of the next open days.
+function soonestSpots(first, last, picks, timesFor, count) {
+  const spots = []
+  for (let key = first; key <= last && spots.length < count; key = addDays(key, 1)) {
+    const { status, times } = timesFor(key, picks)
+    if (status === 'ok') spots.push({ date: key, time: times[0] })
   }
-  return weeks
+  return spots
+}
+
+// One month, Tuesday to Saturday only (the days Flor grooms). Days that can't be
+// booked are greyed out; a green dot marks days with open times.
+function MonthCalendar({ month, onMonth, first, last, selected, isOpen, onPick }) {
+  const [y, m] = month.split('-').map(Number)
+  const daysInMonth = new Date(y, m, 0).getDate()
+  // Weeks already gone aren't shown: start from the week of the first bookable day.
+  const firstWeek = addDays(first, 2 - fromKey(first).getDay()) // that week's Tuesday (the next one on a Sunday or Monday)
+  const cells = []
+  for (let d = 1; d <= daysInMonth; d++) {
+    const key = `${month}-${String(d).padStart(2, '0')}`
+    const weekday = fromKey(key).getDay()
+    if (weekday < 2 || key < firstWeek) continue
+    // Blank boxes before the month's first grooming day, so it lines up under its weekday.
+    if (!cells.length) for (let i = 2; i < weekday; i++) cells.push(null)
+    cells.push(key)
+  }
+  const shift = (n) => {
+    const d = new Date(y, m - 1 + n, 1)
+    onMonth(`${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}`)
+  }
+  const label = new Date(y, m - 1, 1).toLocaleString('en-US', { month: 'long', year: 'numeric' })
+
+  return (
+    <div className="calendar">
+      <div className="cal-head">
+        <button type="button" className="cal-arrow" onClick={() => shift(-1)} disabled={month <= first.slice(0, 7)} aria-label="Previous month">‹</button>
+        <b>{label}</b>
+        <button type="button" className="cal-arrow" onClick={() => shift(1)} disabled={month >= last.slice(0, 7)} aria-label="Next month">›</button>
+      </div>
+      <div className="cal-grid">
+        {['Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => <div key={d} className="cal-dow">{d}</div>)}
+        {cells.map((key, i) => {
+          if (!key) return <span key={`blank-${i}`} />
+          const inRange = key >= first && key <= last
+          const open = inRange && isOpen(key)
+          const n = Number(key.slice(8))
+          return (
+            <button
+              key={key}
+              type="button"
+              className={`cal-day ${open ? 'open' : ''} ${inRange && !open ? 'full' : ''} ${selected === key ? 'on' : ''}`}
+              disabled={!open}
+              aria-pressed={selected === key}
+              aria-label={`${formatLong(key)}${open ? '' : inRange ? ', full or closed' : ''}`}
+              onClick={() => onPick(key)}
+            >
+              {n}
+              {open && <span className="cal-dot" aria-hidden="true" />}
+            </button>
+          )
+        })}
+      </div>
+      <p className="cal-legend">
+        <span><i className="cal-dot" /> open</span>
+        <span><s>12</s> full or closed</span>
+      </p>
+    </div>
+  )
+}
+
+// "Tue, Oct 27"
+function formatShortDay(key) {
+  const { day, date, month } = dayParts(key)
+  return `${day}, ${month} ${date}`
 }
 
 function Review({ account, picks, date, time, flexible, note, photo }) {
@@ -309,7 +380,7 @@ function Review({ account, picks, date, time, flexible, note, photo }) {
   return (
     <>
       <h2 className="title">Look right?</h2>
-      <p className="sub">This sends a request to our front desk. We'll email {account.email} when it's confirmed.</p>
+      <p className="sub">This sends a request to the Roosevelt Pups team. We'll email {account.email} when it's confirmed, usually within an hour during store hours.</p>
       <dl className="review">
         {picks.map((p) => (
           <div key={p.pupId}>
@@ -321,7 +392,7 @@ function Review({ account, picks, date, time, flexible, note, photo }) {
         <dd>{when}</dd>
         {note && (
           <>
-            <dt>Notes for Flor</dt>
+            <dt>Notes for Flor (your groomer)</dt>
             <dd>{note}</dd>
           </>
         )}

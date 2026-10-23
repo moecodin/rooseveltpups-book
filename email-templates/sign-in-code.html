@@ -1,0 +1,75 @@
+<!--
+  The sign-in code email. Paste this whole file into BOTH Supabase templates:
+  Authentication → Emails → Templates → "Magic Link" and "Confirm signup".
+  Subject for both: Your Roosevelt Pups code: {{ .Token }}
+
+  Built for email: tables and inline styles, because many email apps ignore
+  anything else. The logo is text (not a picture), so it shows even when the
+  email app blocks images. {{ .Token }} and {{ .Email }} are filled in by Supabase.
+-->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="color-scheme" content="light">
+<meta name="supported-color-schemes" content="light">
+<title>Your Roosevelt Pups code</title>
+</head>
+<body style="margin:0; padding:0; background:#e2e8ef;">
+  <!-- Preview text shown next to the subject in the inbox -->
+  <div style="display:none; max-height:0; overflow:hidden; opacity:0;">Your code is {{ .Token }}. It works for 10 minutes.</div>
+
+  <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="background:#e2e8ef;">
+    <tr>
+      <td align="center" style="padding:32px 16px;">
+        <table role="presentation" width="100%" cellpadding="0" cellspacing="0" border="0" style="max-width:460px; background:#ffffff; border-radius:16px; border:1px solid #d5dde7;">
+
+          <!-- Logo, written out in the logo's colors -->
+          <tr>
+            <td align="center" style="padding:28px 24px 8px; font-family:Arial, Helvetica, sans-serif;">
+              <div style="font-size:26px; font-weight:bold; letter-spacing:1px; color:#0d2e43; line-height:1;">R<span style="color:#e2262c;">OO</span>SEVELT</div>
+              <div style="font-size:13px; font-weight:bold; letter-spacing:9px; color:#e2262c; padding-top:4px; padding-left:9px;">PUPS</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td align="center" style="padding:16px 28px 4px; font-family:Arial, Helvetica, sans-serif; color:#1b2838;">
+              <div style="font-size:20px; font-weight:bold;">Here's your sign-in code</div>
+              <div style="font-size:15px; color:#5e6a7d; padding-top:6px; line-height:1.45;">Type it on the booking page to continue.</div>
+            </td>
+          </tr>
+
+          <!-- The code -->
+          <tr>
+            <td align="center" style="padding:20px 28px;">
+              <table role="presentation" cellpadding="0" cellspacing="0" border="0">
+                <tr>
+                  <td align="center" style="background:#f3f6f9; border:1px solid #d5dde7; border-radius:12px; padding:16px 16px 16px 26px; font-family:'Courier New', Courier, monospace; font-size:34px; font-weight:bold; letter-spacing:10px; color:#0d2e43;">{{ .Token }}</td>
+                </tr>
+              </table>
+              <div style="font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#5e6a7d; padding-top:12px;">It works for 10 minutes.</div>
+            </td>
+          </tr>
+
+          <tr>
+            <td style="padding:4px 28px 24px; font-family:Arial, Helvetica, sans-serif; font-size:13px; color:#5e6a7d; line-height:1.5; text-align:center;">
+              We sent this to {{ .Email }}. Didn't ask for a code? You can ignore this email; nobody can sign in without it.
+            </td>
+          </tr>
+
+          <!-- Footer -->
+          <tr>
+            <td style="border-top:1px solid #e1e7ee; padding:18px 28px 24px; font-family:Arial, Helvetica, sans-serif; font-size:12px; color:#5e6a7d; line-height:1.6; text-align:center;">
+              <strong style="color:#0d2e43;">Roosevelt Pups</strong><br>
+              544 Main Street, Roosevelt Island, NY 10044<br>
+              <a href="tel:+12123718901" style="color:#0d2e43; text-decoration:none;">(212) 371-8901</a> ·
+              <a href="mailto:info@rooseveltpups.com" style="color:#0d2e43; text-decoration:none;">info@rooseveltpups.com</a>
+            </td>
+          </tr>
+        </table>
+      </td>
+    </tr>
+  </table>
+</body>
+</html>

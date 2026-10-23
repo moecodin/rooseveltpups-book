@@ -1,0 +1,189 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Calendar Mockups</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" />
+<style>
+  /* Same colors as the booking site (src/index.css). */
+  :root {
+    --navy: #0d2e43; --red: #e2262c; --desk: #e2e8ef; --paper: #f3f6f9; --head: #e9eef4;
+    --ink: #1b2838; --muted: #5e6a7d; --line: #d5dde7; --field: #fff; --pick: #e8eefb; --pick-line: #2742a8;
+    --gone: #a9b1bf; --ok: #1f7a33; --frame: #c9d2dd;
+    --shadow: 0 1px 2px rgba(20,30,60,.06), 0 6px 18px rgba(20,30,60,.06);
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --navy: #3d6f91; --red: #f0595d; --desk: #1c1c1b; --paper: #262624; --head: #2e2e2c; --ink: #ecebe6;
+      --muted: #a3a29c; --line: #3a3a37; --field: #1f1f1e; --pick: #22293a; --pick-line: #8fb1f4; --gone: #6f6e69; --ok: #7fcf8f; --frame: #3a3a37;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.25);
+    }
+  }
+  :root[data-theme="dark"] {
+    --navy: #3d6f91; --red: #f0595d; --desk: #1c1c1b; --paper: #262624; --head: #2e2e2c; --ink: #ecebe6;
+    --muted: #a3a29c; --line: #3a3a37; --field: #1f1f1e; --pick: #22293a; --pick-line: #8fb1f4; --gone: #6f6e69; --ok: #7fcf8f; --frame: #3a3a37;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.25);
+  }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--desk); color: var(--ink); font: 15px/1.45 'Figtree', system-ui, sans-serif; }
+  .page { max-width: 1180px; margin: 0 auto; padding: 32px 16px 64px; }
+  .page-head { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; align-items: start; }
+  h1 { font-size: 26px; margin: 0 0 4px; }
+  .page-head p { margin: 0; color: var(--muted); max-width: 640px; }
+  .theme { border: 1px solid var(--line); background: var(--paper); color: var(--ink); border-radius: 999px; padding: 6px 14px; font: inherit; font-size: 14px; }
+  .options { display: flex; flex-wrap: wrap; gap: 28px; margin-top: 28px; align-items: flex-start; }
+  .option { display: flex; flex-direction: column; gap: 8px; max-width: 100%; }
+  .option-head { display: flex; gap: 10px; align-items: baseline; }
+  .tag { font-size: 13px; font-weight: 600; color: #fff; background: var(--navy); border-radius: 999px; padding: 2px 10px; }
+  .option h2 { font-size: 18px; margin: 0; }
+  .option > p { margin: 0; color: var(--muted); font-size: 14px; max-width: 340px; }
+  .phone { width: 340px; max-width: 100%; border-radius: 30px; border: 8px solid var(--frame); background: var(--desk); padding: 16px; }
+  .card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 18px 16px 20px; }
+  .step { font-size: 12px; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: .04em; margin: 0 0 2px; }
+  .card h3 { font-size: 18px; margin: 0 0 2px; }
+  .sub { color: var(--muted); font-size: 13px; margin: 0 0 14px; }
+
+  /* Month header */
+  .month { display: flex; align-items: center; justify-content: space-between; margin-bottom: 8px; }
+  .month b { font-size: 16px; }
+  .arrow { width: 34px; height: 34px; border-radius: 50%; border: 1px solid var(--line); background: var(--field); color: var(--ink); font-size: 16px; }
+  .arrow:disabled { opacity: .35; }
+
+  /* A: full week grid */
+  .grid { display: grid; gap: 4px; }
+  .grid.seven { grid-template-columns: repeat(7, 1fr); }
+  .grid.five { grid-template-columns: repeat(5, 1fr); }
+  .dow { font-size: 11px; font-weight: 600; color: var(--muted); text-align: center; padding-bottom: 2px; }
+  .d { aspect-ratio: 1; border: 0; border-radius: 50%; background: none; color: var(--ink); font: inherit; font-weight: 600; display: grid; place-items: center; position: relative; }
+  .d.open:hover { background: var(--head); }
+  .d.off { color: var(--gone); font-weight: 400; }
+  .d.full { color: var(--gone); font-weight: 400; text-decoration: line-through; }
+  .d.today { box-shadow: inset 0 0 0 1px var(--line); color: var(--gone); }
+  .d.on { background: var(--navy); color: #fff; }
+  .d.blank { visibility: hidden; }
+  .d .dot { position: absolute; bottom: 5px; width: 5px; height: 5px; border-radius: 50%; background: var(--ok); }
+  .d.on .dot { background: #fff; }
+  .five .d { aspect-ratio: auto; border-radius: 10px; padding: 8px 0 10px; }
+
+  .legend { display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: var(--muted); margin: 10px 0 0; }
+  .legend i { display: inline-block; width: 8px; height: 8px; border-radius: 50%; background: var(--ok); margin-right: 5px; }
+  .legend s { color: var(--gone); }
+
+  .times-label { font-weight: 600; font-size: 14px; margin: 16px 0 8px; }
+  .times { display: grid; grid-template-columns: repeat(3, 1fr); gap: 8px; }
+  .t { border: 1px solid var(--line); background: var(--field); color: var(--ink); border-radius: 10px; padding: 9px 4px; font: inherit; font-weight: 600; }
+  .t.on { border-color: var(--pick-line); background: var(--pick); color: var(--pick-line); box-shadow: inset 0 0 0 1px var(--pick-line); }
+
+  /* C: soonest-open shortcut */
+  .soonest { display: grid; gap: 8px; margin-bottom: 14px; }
+  .soon { display: flex; justify-content: space-between; align-items: center; border: 1px solid var(--line); background: var(--field); border-radius: 12px; padding: 10px 12px; font: inherit; color: var(--ink); text-align: left; }
+  .soon small { display: block; color: var(--muted); font-size: 12px; }
+  .soon span:last-child { font-weight: 700; color: var(--pick-line); }
+  .or { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 12px; margin: 4px 0 12px; }
+  .or::before, .or::after { content: ''; flex: 1; height: 1px; background: var(--line); }
+  .note { font-size: 12px; color: var(--muted); background: var(--head); border-radius: 10px; padding: 9px 11px; margin-top: 14px; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="page-head">
+    <div>
+      <h1>Booking site: day picker mockups</h1>
+      <p>Three ways to pick the day, replacing the 9 weeks of cards. Same rules underneath: only Tuesday to Saturday, 8 weeks ahead, closed and full days can't be picked, and the times show under the calendar once a day is chosen.</p>
+    </div>
+    <button class="theme" id="theme" type="button">Switch light / dark</button>
+  </div>
+
+  <div class="options">
+    <div class="option">
+      <div class="option-head"><span class="tag">A</span><h2>Classic month</h2></div>
+      <p>A normal calendar, Sunday to Saturday. Sundays and Mondays are greyed out. Familiar to everyone.</p>
+      <div class="phone"><div class="card">
+        <p class="step">Step 2 of 4</p>
+        <h3>When works for you?</h3>
+        <p class="sub">Drop-off between 9am and 1pm.</p>
+        <div class="month"><button class="arrow" disabled>‹</button><b>November 2026</b><button class="arrow">›</button></div>
+        <div class="grid seven" id="a"></div>
+        <div class="legend"><span><s>12</s> full or closed</span></div>
+        <p class="times-label">Tuesday, Nov 10</p>
+        <div class="times"><button class="t">9:00 AM</button><button class="t on">10:00 AM</button><button class="t">11:00 AM</button><button class="t">12:00 PM</button></div>
+        <div class="note">Don't see the time you need? Call us at <b>(212) 371-8901</b> and we'll see what we can do.</div>
+      </div></div>
+    </div>
+
+    <div class="option">
+      <div class="option-head"><span class="tag">B</span><h2>Grooming days only</h2></div>
+      <p>Only Tuesday to Saturday columns, so every box is a day Flor works. Bigger boxes, easier to tap. A green dot means times are open.</p>
+      <div class="phone"><div class="card">
+        <p class="step">Step 2 of 4</p>
+        <h3>When works for you?</h3>
+        <p class="sub">Drop-off between 9am and 1pm.</p>
+        <div class="month"><button class="arrow" disabled>‹</button><b>November 2026</b><button class="arrow">›</button></div>
+        <div class="grid five" id="b"></div>
+        <div class="legend"><span><i></i>open</span><span><s>12</s> full or closed</span></div>
+        <p class="times-label">Tuesday, Nov 10</p>
+        <div class="times"><button class="t">9:00 AM</button><button class="t on">10:00 AM</button><button class="t">11:00 AM</button><button class="t">12:00 PM</button></div>
+        <div class="note">Don't see the time you need? Call us at <b>(212) 371-8901</b> and we'll see what we can do.</div>
+      </div></div>
+    </div>
+
+    <div class="option">
+      <div class="option-head"><span class="tag">C</span><h2>Soonest first, then calendar</h2></div>
+      <p>The next three open spots on top for one tap, which suits most clients. The calendar (B's style) is below for anyone with a day in mind.</p>
+      <div class="phone"><div class="card">
+        <p class="step">Step 2 of 4</p>
+        <h3>When works for you?</h3>
+        <p class="sub">Drop-off between 9am and 1pm.</p>
+        <div class="soonest">
+          <button class="soon"><span><small>Soonest</small>Tue, Oct 27</span><span>10:00 AM</span></button>
+          <button class="soon"><span><small>Next</small>Wed, Oct 28</span><span>9:00 AM</span></button>
+          <button class="soon"><span><small>Next</small>Thu, Oct 29</span><span>11:00 AM</span></button>
+        </div>
+        <div class="or">or pick a day</div>
+        <div class="month"><button class="arrow" disabled>‹</button><b>November 2026</b><button class="arrow">›</button></div>
+        <div class="grid five" id="c"></div>
+      </div></div>
+    </div>
+  </div>
+</div>
+<script>
+  // November 2026, with a few made-up full and closed days. Today is Fri Oct 23.
+  const full = [5, 12, 19], closed = [26], picked = 10
+  const first = new Date(2026, 10, 1).getDay() // Sunday = 0
+  const days = 30
+
+  function sevenDay(el) {
+    el.innerHTML = ['S', 'M', 'T', 'W', 'T', 'F', 'S'].map((d) => `<div class="dow">${d}</div>`).join('')
+    for (let i = 0; i < first; i++) el.innerHTML += '<span class="d blank"></span>'
+    for (let n = 1; n <= days; n++) {
+      const dow = new Date(2026, 10, n).getDay()
+      const cls = dow < 2 || closed.includes(n) ? 'off' : full.includes(n) ? 'full' : n === picked ? 'open on' : 'open'
+      el.innerHTML += `<button class="d ${cls}" ${cls.startsWith('open') ? '' : 'disabled'}>${n}</button>`
+    }
+  }
+
+  function fiveDay(el, dots) {
+    el.innerHTML = ['Tue', 'Wed', 'Thu', 'Fri', 'Sat'].map((d) => `<div class="dow">${d}</div>`).join('')
+    // Nov 3 is the first Tuesday, so the grid starts there; Sundays and Mondays are skipped.
+    for (let n = 3; n <= days; n++) {
+      const dow = new Date(2026, 10, n).getDay()
+      if (dow < 2) continue
+      const cls = closed.includes(n) ? 'off' : full.includes(n) ? 'full' : n === picked ? 'open on' : 'open'
+      const dot = dots && cls.startsWith('open') ? '<span class="dot"></span>' : ''
+      el.innerHTML += `<button class="d ${cls}" ${cls.startsWith('open') ? '' : 'disabled'}>${n}${dot}</button>`
+    }
+  }
+
+  sevenDay(document.getElementById('a'))
+  fiveDay(document.getElementById('b'), true)
+  fiveDay(document.getElementById('c'), true)
+
+  document.getElementById('theme').addEventListener('click', () => {
+    const root = document.documentElement
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+    root.dataset.theme = dark ? 'light' : 'dark'
+  })
+</script>
+</body>
+</html>

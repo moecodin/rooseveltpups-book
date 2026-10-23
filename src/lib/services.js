@@ -14,15 +14,20 @@ export const SERVICES = {
 export const MAIN_CHOICES = [
   { value: 'full', label: 'Full groom', note: 'Everything in a bath, plus a full haircut' },
   { value: 'bath', label: 'Bath and brush', note: 'Hypoallergenic wash, nails, ears and anal glands' },
-  { value: 'alc', label: 'À la carte', note: 'Just a quick trim, about 15 minutes' },
+  { value: 'alc', label: 'Quick services', note: 'Nails, face or sanitary trim, anal glands: about 15 minutes' },
 ]
 
+// Quick services ("à la carte" on the staff site).
 export const A_LA_CARTE = {
   nails: 'Nails',
   face: 'Face trim',
   sanitary: 'Sanitary trim',
   glands: 'Anal glands',
 }
+
+// Their prices, from the public site's Services and Rates page. Full grooms and
+// baths aren't priced here: they depend on size and coat.
+export const QUICK_PRICES = { nails: 25, face: 35, sanitary: 25, glands: 25 }
 
 export const CUT_STYLES = {
   summer: 'Summer cut',
@@ -35,7 +40,7 @@ export const DESHED_EXTRA = 30 // deshedding adds about half an hour
 const addonLabel = (value) => (value === 'deshed' ? 'Deshed' : A_LA_CARTE[value])
 
 // A pup's choice as the staff site stores it: { service, addons, cut }.
-// À la carte picks become the first one as the service and the rest as add-ons
+// Quick-service picks become the first one as the service and the rest as add-ons
 // ("Nails only + Anal glands"), like the desk books them.
 export function toBooking(choice) {
   if (choice.main === 'full') return { service: 'full', addons: [], cut: choice.cut || '' }

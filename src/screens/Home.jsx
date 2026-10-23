@@ -3,7 +3,7 @@ import { TEST_MODE } from '../lib/contact.js'
 import { formatLong, formatTime, todayKey } from '../lib/dates.js'
 import { formatPrice, serviceSummary } from '../lib/services.js'
 
-const STATUS = { requested: 'Waiting for the desk', confirmed: 'Confirmed', declined: 'Not available', cancelled: 'Cancelled' }
+const STATUS = { requested: 'Waiting for Roosevelt Pups Team to confirm', confirmed: 'Confirmed', declined: 'Not available', cancelled: 'Cancelled' }
 
 // The signed-in page: the client's pups and their requests.
 export default function Home({ account, onBook, onAddPup, onCancelRequest, onTestLink, onTestConfirm }) {
@@ -19,8 +19,8 @@ export default function Home({ account, onBook, onAddPup, onCancelRequest, onTes
   return (
     <>
       <section className="card-box">
-        <h1 className="title">Hi{account.firstName ? `, ${account.firstName}` : ''}!</h1>
-        <p className="sub">Ready for a spa day?</p>
+        <h1 className="title">{greeting(account)}</h1>
+        <p className="sub">{account.pups.length > 1 ? 'Are your pups ready for a spa day?' : `Is ${account.pups[0]?.name ?? 'your pup'} ready for a spa day?`}</p>
         <button type="button" className="btn btn-brand w-100" onClick={onBook}>
           Book a groom
         </button>
@@ -52,7 +52,9 @@ export default function Home({ account, onBook, onAddPup, onCancelRequest, onTes
               </div>
             </div>
           ))}
-          <p className="form-text mt-3 mb-0">Need to change a time? Cancel and book again, or give us a call.</p>
+          <p className="form-text mt-3 mb-0">
+            We'll respond within an hour during store hours. Need to change a time? Cancel and book again, or give us a call.
+          </p>
         </section>
       )}
 
@@ -99,6 +101,14 @@ export default function Home({ account, onBook, onAddPup, onCancelRequest, onTes
       <CallUs text="Questions? Call us at" />
     </>
   )
+}
+
+// "Hi, Jane and Biscuit!" / "Hi, Jane, Biscuit and Coco!"
+function greeting(account) {
+  const names = [account.firstName, ...account.pups.map((p) => p.name)].filter(Boolean)
+  if (!names.length) return 'Hi!'
+  const list = names.length === 1 ? names[0] : `${names.slice(0, -1).join(', ')} and ${names.at(-1)}`
+  return `Hi, ${list}!`
 }
 
 function when(r) {

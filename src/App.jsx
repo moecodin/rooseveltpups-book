@@ -92,7 +92,7 @@ export default function App() {
         <div className="done-mark" aria-hidden="true">🐾</div>
         <h1 className="title">Request sent!</h1>
         <p className="sub">
-          Our front desk will check the schedule and email <b>{account.email}</b> when it's confirmed.
+          The Roosevelt Pups team will check the schedule and email <b>{account.email}</b> when it's confirmed. We'll respond within an hour during store hours.
         </p>
         <button type="button" className="btn btn-brand w-100" onClick={() => go('home')}>
           Done
