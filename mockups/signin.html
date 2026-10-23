@@ -1,0 +1,293 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>Sign-in Mockups</title>
+<link rel="icon" href="../public/favicon.png" />
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Figtree:wght@400;500;600;700&display=swap" />
+<style>
+  /* Same colors as the staff site (src/index.css there): "Cool mist" light, warm dark. */
+  :root {
+    --navy: #0d2e43; --navy-hover: #173f58; --red: #e2262c;
+    --desk: #e2e8ef; --paper: #f3f6f9; --head: #e9eef4; --ink: #1b2838;
+    --muted: #5e6a7d; --faint: #a9b1bf; --line: #d5dde7; --hover: #ebf0f5;
+    --field: #fff; --pick: #e8eefb; --pick-line: #2742a8;
+    --shadow: 0 1px 2px rgba(20,30,60,.06), 0 6px 18px rgba(20,30,60,.06);
+    --frame: #c9d2dd;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --navy: #3d6f91; --navy-hover: #4c82a8; --red: #f0595d;
+      --desk: #1c1c1b; --paper: #262624; --head: #2e2e2c; --ink: #ecebe6;
+      --muted: #a3a29c; --faint: #6f6e69; --line: #3a3a37; --hover: #2d2d2b;
+      --field: #1f1f1e; --pick: #22293a; --pick-line: #8fb1f4;
+      --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.25);
+      --frame: #3a3a37;
+    }
+  }
+  :root[data-theme="dark"] {
+    --navy: #3d6f91; --navy-hover: #4c82a8; --red: #f0595d;
+    --desk: #1c1c1b; --paper: #262624; --head: #2e2e2c; --ink: #ecebe6;
+    --muted: #a3a29c; --faint: #6f6e69; --line: #3a3a37; --hover: #2d2d2b;
+    --field: #1f1f1e; --pick: #22293a; --pick-line: #8fb1f4;
+    --shadow: 0 1px 2px rgba(0,0,0,.3), 0 6px 18px rgba(0,0,0,.25);
+    --frame: #3a3a37;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--desk); color: var(--ink);
+    font: 15px/1.45 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 1180px; margin: 0 auto; padding: 32px 16px 64px; }
+  .page-head { display: flex; justify-content: space-between; align-items: start; gap: 16px; flex-wrap: wrap; }
+  .page-head h1 { font-size: 26px; margin: 0 0 4px; }
+  .page-head p { margin: 0; color: var(--muted); max-width: 640px; }
+  .theme { border: 1px solid var(--line); background: var(--paper); color: var(--ink); border-radius: 999px; padding: 6px 14px; font: inherit; font-size: 14px; cursor: pointer; }
+
+  section.option { margin-top: 40px; padding-top: 28px; border-top: 1px solid var(--line); }
+  .option-head { display: flex; gap: 12px; align-items: baseline; flex-wrap: wrap; }
+  .option-head h2 { font-size: 20px; margin: 0; }
+  .tag { font-size: 13px; font-weight: 600; color: #fff; background: var(--navy); border-radius: 999px; padding: 2px 10px; }
+  .option > p { color: var(--muted); margin: 6px 0 18px; max-width: 760px; }
+  .pros { display: flex; gap: 8px 24px; flex-wrap: wrap; margin: -6px 0 18px; padding: 0; list-style: none; font-size: 14px; }
+  .pros li::before { content: '✓ '; color: var(--ok, #1f7a33); font-weight: 700; }
+  .pros li.con::before { content: '– '; color: var(--muted); }
+
+  .screens { display: flex; gap: 20px; flex-wrap: wrap; align-items: flex-start; }
+  .screen { display: flex; flex-direction: column; gap: 8px; max-width: 100%; min-width: 0; }
+  .screen-label { font-size: 13px; font-weight: 600; color: var(--muted); }
+  .phone {
+    width: 340px; max-width: 100%; height: 690px; border-radius: 30px; border: 8px solid var(--frame);
+    background: var(--desk); overflow: hidden; display: flex; flex-direction: column;
+  }
+  .wide { width: 760px; max-width: 100%; height: 480px; border-radius: 14px; border: 1px solid var(--frame); background: var(--desk); overflow: hidden; display: flex; }
+
+  /* ---------- What the booking site itself would look like ---------- */
+  .app { flex: 1; display: flex; flex-direction: column; justify-content: center; padding: 16px; overflow: auto; }
+  .card { background: var(--paper); border: 1px solid var(--line); border-radius: 16px; box-shadow: var(--shadow); padding: 20px 18px 22px; }
+  .logo { display: block; width: 72px; margin: 0 auto 6px; background: #fff; border-radius: 12px; padding: 5px; }
+  .logo-wide { display: block; width: 190px; margin: 2px auto 14px; }
+  :root[data-theme="dark"] .logo-wide { content: url(../public/logo-horizontal-white.png); }
+  :root[data-theme="light"] .logo-wide { content: url(../public/logo-horizontal.png); }
+  .card h3 { font-size: 21px; font-weight: 700; text-align: center; margin: 0; }
+  .sub { text-align: center; color: var(--muted); font-size: 14px; margin: 2px 0 18px; }
+  label { display: block; font-weight: 500; font-size: 14px; margin-bottom: 6px; }
+  .input { width: 100%; border: 1px solid var(--line); background: var(--field); color: var(--ink); border-radius: 8px; padding: 10px 12px; font: inherit; }
+  .input.filled { border-color: var(--pick-line); box-shadow: 0 0 0 3px color-mix(in srgb, var(--pick-line) 18%, transparent); }
+  .hint { font-size: 13px; color: var(--muted); margin: 6px 0 14px; }
+  .btn { display: block; width: 100%; border: 0; border-radius: 8px; padding: 11px 14px; font: inherit; font-weight: 600; background: var(--navy); color: #fff; cursor: pointer; }
+  .btn:hover { background: var(--navy-hover); }
+  .link { display: block; text-align: center; margin-top: 12px; font-size: 14px; color: var(--muted); text-decoration: underline; }
+  .call { text-align: center; font-size: 13px; color: var(--muted); margin-top: 16px; }
+  .call a { color: inherit; font-weight: 600; }
+
+  .choices { display: grid; gap: 10px; margin-bottom: 18px; }
+  .choice { display: flex; gap: 12px; align-items: center; text-align: left; border: 1px solid var(--line); background: var(--field); border-radius: 12px; padding: 12px 14px; font: inherit; color: var(--ink); }
+  .choice.on { border-color: var(--pick-line); background: var(--pick); box-shadow: inset 0 0 0 1px var(--pick-line); }
+  .choice .icon { font-size: 22px; width: 32px; text-align: center; }
+  .choice b { display: block; font-size: 15px; }
+  .choice span { font-size: 13px; color: var(--muted); }
+  .seg { display: grid; grid-template-columns: 1fr 1fr; background: var(--head); border-radius: 10px; padding: 4px; margin-bottom: 18px; }
+  .seg button { border: 0; background: none; font: inherit; font-weight: 600; font-size: 14px; color: var(--muted); padding: 8px; border-radius: 7px; }
+  .seg button.on { background: var(--paper); color: var(--ink); box-shadow: var(--shadow); }
+
+  .code { display: grid; grid-template-columns: repeat(6, 1fr); gap: 7px; margin: 4px 0 8px; }
+  .code div { aspect-ratio: 4 / 5; border: 1px solid var(--line); background: var(--field); border-radius: 8px; display: grid; place-items: center; font-size: 22px; font-weight: 700; }
+  .code div.next { border-color: var(--pick-line); box-shadow: 0 0 0 3px color-mix(in srgb, var(--pick-line) 18%, transparent); }
+  .sent { background: var(--head); border-radius: 10px; padding: 10px 12px; font-size: 14px; margin-bottom: 16px; text-align: center; }
+  .sent b { word-break: break-all; }
+
+  /* Option C: a navy welcome panel beside the form on wide screens; on top on phones */
+  .panel { background: var(--navy); color: #fff; padding: 28px; display: flex; flex-direction: column; gap: 18px; }
+  .wide .panel { width: 44%; justify-content: center; }
+  .panel .logo { margin: 0; width: 72px; }
+  .panel h3 { font-size: 24px; margin: 0; text-align: left; color: #fff; }
+  .panel ol { margin: 0; padding: 0; list-style: none; display: grid; gap: 12px; }
+  .panel li { display: flex; gap: 10px; align-items: start; font-size: 14px; opacity: .92; }
+  .panel li i { font-style: normal; flex: none; width: 24px; height: 24px; border-radius: 50%; background: rgba(255,255,255,.16); display: grid; place-items: center; font-size: 12px; font-weight: 700; }
+  .wide .side { flex: 1; display: flex; align-items: center; padding: 28px; }
+  .wide .side .card { width: 100%; box-shadow: none; border: 0; background: transparent; padding: 0; }
+  .phone .panel { padding: 22px 20px 20px; gap: 12px; }
+  .phone .panel h3 { font-size: 20px; }
+  .phone .panel .row { display: flex; gap: 12px; align-items: center; }
+  .phone .panel .logo { width: 52px; padding: 3px; border-radius: 10px; }
+  .phone .side { flex: 1; padding: 20px; }
+  .phone .side .card { padding: 20px 18px; }
+  .left { text-align: left !important; }
+</style>
+</head>
+<body>
+<div class="page">
+  <div class="page-head">
+    <div>
+      <h1>Booking site: sign-in page mockups</h1>
+      <p>Three ways to do the first page clients see at book.rooseveltpups.com. All three use the staff site's colors, font and logo, and the same email-code sign-in (no passwords). Pick one, or mix parts.</p>
+    </div>
+    <button class="theme" id="theme" type="button">Switch light / dark</button>
+  </div>
+
+  <!-- ===================== A ===================== -->
+  <section class="option">
+    <div class="option-head"><span class="tag">A</span><h2>Choose first, then email</h2></div>
+    <p>Clients say whether their pup is new or returning, then type their email. Closest to how you'd ask on the phone.</p>
+    <ul class="pros">
+      <li>Clear from the start</li>
+      <li>First-timers see what to have ready (vaccines)</li>
+      <li class="con">Returning clients answer it every time they sign in</li>
+    </ul>
+    <div class="screens">
+      <div class="screen">
+        <span class="screen-label">1 · Start</span>
+        <div class="phone"><div class="app"><div class="card">
+          <picture><source srcset="../public/logo-horizontal-white.png" media="(prefers-color-scheme: dark)" /><img class="logo-wide" src="../public/logo-horizontal.png" alt="Roosevelt Pups" /></picture>
+          <h3>Book a groom</h3>
+          <p class="sub">Tuesday to Saturday, 9am–1pm</p>
+          <div class="choices">
+            <button class="choice on" type="button"><span class="icon">🐶</span><span><b>Returning pup</b><span>We've groomed your dog before</span></span></button>
+            <button class="choice" type="button"><span class="icon">✨</span><span><b>First time here</b><span>Have their vaccine records handy</span></span></button>
+          </div>
+          <label for="a-email">Your email</label>
+          <input id="a-email" class="input filled" value="jane@example.com" />
+          <p class="hint">We'll email you a 6-digit code. No password needed.</p>
+          <button class="btn" type="button">Send me a code</button>
+          <p class="call">Prefer to call? <a href="tel:+12123718901">(212) 371-8901</a></p>
+        </div></div></div>
+      </div>
+      <div class="screen">
+        <span class="screen-label">2 · Enter the code</span>
+        <div class="phone"><div class="app"><div class="card">
+          <picture><source srcset="../public/logo-horizontal-white.png" media="(prefers-color-scheme: dark)" /><img class="logo-wide" src="../public/logo-horizontal.png" alt="Roosevelt Pups" /></picture>
+          <h3>Check your email</h3>
+          <p class="sub">The code expires in 10 minutes</p>
+          <div class="sent">We sent a code to <b>jane@example.com</b></div>
+          <label>6-digit code</label>
+          <div class="code"><div>4</div><div>8</div><div>2</div><div class="next"></div><div></div><div></div></div>
+          <p class="hint">Can't find it? Check your spam folder.</p>
+          <button class="btn" type="button">Continue</button>
+          <a class="link">Send a new code</a>
+          <a class="link">Use a different email</a>
+        </div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== B ===================== -->
+  <section class="option">
+    <div class="option-head"><span class="tag">B</span><h2>Email first, ask only once</h2></div>
+    <p>Just an email box. Signed-in clients with a saved pup go straight to booking. Only a brand-new account is asked "first time or returning?", once.</p>
+    <ul class="pros">
+      <li>Fewest taps for regulars</li>
+      <li>Simplest first page</li>
+      <li class="con">First-timers learn about the vaccine upload one step later</li>
+    </ul>
+    <div class="screens">
+      <div class="screen">
+        <span class="screen-label">1 · Start</span>
+        <div class="phone"><div class="app"><div class="card">
+          <img class="logo" src="../public/logo-mark.png" alt="Roosevelt Pups" />
+          <h3>Book a groom</h3>
+          <p class="sub">Sign in or get started with your email</p>
+          <label for="b-email">Email</label>
+          <input id="b-email" class="input filled" value="jane@example.com" />
+          <p class="hint">We'll email you a 6-digit code. No password needed.</p>
+          <button class="btn" type="button">Continue</button>
+          <p class="call">Prefer to call? <a href="tel:+12123718901">(212) 371-8901</a></p>
+        </div></div></div>
+      </div>
+      <div class="screen">
+        <span class="screen-label">2 · Enter the code</span>
+        <div class="phone"><div class="app"><div class="card">
+          <img class="logo" src="../public/logo-mark.png" alt="Roosevelt Pups" />
+          <h3>Check your email</h3>
+          <div class="sent" style="margin-top:14px">Code sent to <b>jane@example.com</b></div>
+          <div class="code"><div>4</div><div>8</div><div>2</div><div>9</div><div>1</div><div class="next"></div></div>
+          <p class="hint">It fills in by itself on most phones.</p>
+          <button class="btn" type="button">Sign in</button>
+          <a class="link">Send a new code</a>
+        </div></div></div>
+      </div>
+      <div class="screen">
+        <span class="screen-label">3 · New accounts only</span>
+        <div class="phone"><div class="app"><div class="card">
+          <h3>Welcome!</h3>
+          <p class="sub">Has your pup been groomed here before?</p>
+          <div class="seg"><button class="on" type="button">Returning pup</button><button type="button">First time</button></div>
+          <p class="hint" style="margin-top:-6px">We'll find your pup in our records so you don't have to fill everything in again.</p>
+          <label>Dog's name</label><input class="input" style="margin-bottom:12px" placeholder="" />
+          <label>Your last name</label><input class="input" style="margin-bottom:12px" />
+          <label>Phone</label><input class="input" style="margin-bottom:16px" />
+          <button class="btn" type="button">Continue</button>
+        </div></div></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ===================== C ===================== -->
+  <section class="option">
+    <div class="option-head"><span class="tag">C</span><h2>Welcome panel + sign-in</h2></div>
+    <p>A navy panel shows how booking works in three steps, with the sign-in beside it (on top of it on phones). Same flow as B after this page.</p>
+    <ul class="pros">
+      <li>Explains requests and confirmation up front</li>
+      <li>Feels most like a "real" website on a computer</li>
+      <li class="con">More to read on a phone</li>
+    </ul>
+    <div class="screens">
+      <div class="screen">
+        <span class="screen-label">Computer</span>
+        <div class="wide">
+          <div class="panel">
+            <img class="logo" src="../public/logo-mark.png" alt="Roosevelt Pups" />
+            <h3>Book a groom in a minute</h3>
+            <ol>
+              <li><i>1</i><span>Pick a service, a day and a time that works</span></li>
+              <li><i>2</i><span>We check the schedule and confirm by email</span></li>
+              <li><i>3</i><span>Drop off between 9am and 1pm, Tuesday to Saturday</span></li>
+            </ol>
+          </div>
+          <div class="side"><div class="card">
+            <h3 class="left">Sign in or get started</h3>
+            <p class="sub left">No password. We'll email you a code.</p>
+            <label for="c-email">Email</label>
+            <input id="c-email" class="input" style="margin-bottom:14px" />
+            <button class="btn" type="button">Continue</button>
+            <p class="call left">Prefer to call? <a href="tel:+12123718901">(212) 371-8901</a></p>
+          </div></div>
+        </div>
+      </div>
+      <div class="screen">
+        <span class="screen-label">Phone</span>
+        <div class="phone">
+          <div class="panel">
+            <div class="row"><img class="logo" src="../public/logo-mark.png" alt="Roosevelt Pups" /><h3>Book a groom<br />in a minute</h3></div>
+            <ol>
+              <li><i>1</i><span>Pick a service, day and time</span></li>
+              <li><i>2</i><span>We confirm by email</span></li>
+              <li><i>3</i><span>Drop off Tue–Sat, 9am–1pm</span></li>
+            </ol>
+          </div>
+          <div class="side"><div class="card">
+            <h3 class="left" style="font-size:18px">Sign in or get started</h3>
+            <p class="sub left">No password. We'll email you a code.</p>
+            <label for="c2-email">Email</label>
+            <input id="c2-email" class="input" style="margin-bottom:14px" />
+            <button class="btn" type="button">Continue</button>
+            <p class="call left">Prefer to call? <a href="tel:+12123718901">(212) 371-8901</a></p>
+          </div></div>
+        </div>
+      </div>
+    </div>
+  </section>
+</div>
+<script>
+  // Flip between light and dark to check both themes.
+  document.getElementById('theme').addEventListener('click', () => {
+    const root = document.documentElement
+    const dark = root.dataset.theme ? root.dataset.theme === 'dark' : matchMedia('(prefers-color-scheme: dark)').matches
+    root.dataset.theme = dark ? 'light' : 'dark'
+  })
+</script>
+</body>
+</html>

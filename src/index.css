@@ -1,0 +1,504 @@
+/* Roosevelt Pups booking styles.
+   Same colors as the staff site (rooseveltpups/src/index.css): "Cool mist" light
+   and a warm dark theme, picked from the phone or computer's own setting.
+   Bootstrap handles buttons and form boxes; this file handles the rest. */
+
+:root,
+[data-bs-theme='light'] {
+  --navy: #0d2e43;
+  --navy-hover: #173f58;
+  --red: #e2262c;
+  --desk: #e2e8ef;
+  --paper: #f3f6f9;
+  --head: #e9eef4;
+  --ink: #1b2838;
+  --muted: #5e6a7d;
+  --line: #d5dde7;
+  --field: #fff;
+  --pick: #e8eefb;
+  --pick-line: #2742a8;
+  --ok: #1f7a33;
+  --ok-bg: #e5f1e8;
+  --warn: #8a5a00;
+  --warn-bg: #fff4dc;
+  --gone: #8a92a0;
+  --shadow: 0 1px 2px rgba(20, 30, 60, 0.06), 0 6px 18px rgba(20, 30, 60, 0.06);
+
+  --bs-body-font-family: 'Figtree', system-ui, -apple-system, 'Segoe UI', sans-serif;
+  --bs-body-color: var(--ink);
+  --bs-body-bg: var(--paper);
+  --bs-border-color: var(--line);
+}
+
+[data-bs-theme='dark'] {
+  --navy: #3d6f91;
+  --navy-hover: #4c82a8;
+  --red: #f0595d;
+  --desk: #1c1c1b;
+  --paper: #262624;
+  --head: #2e2e2c;
+  --ink: #ecebe6;
+  --muted: #a3a29c;
+  --line: #3a3a37;
+  --field: #1f1f1e;
+  --pick: #22293a;
+  --pick-line: #8fb1f4;
+  --ok: #7fcf8f;
+  --ok-bg: #1f2e22;
+  --warn: #f4c46a;
+  --warn-bg: #3d2e10;
+  --gone: #8a8984;
+  --shadow: 0 1px 2px rgba(0, 0, 0, 0.3), 0 6px 18px rgba(0, 0, 0, 0.25);
+
+  --bs-body-color: var(--ink);
+  --bs-body-bg: var(--paper);
+  --bs-border-color: var(--line);
+}
+
+body {
+  background: var(--desk);
+  color: var(--ink);
+  font-size: 15px;
+  -webkit-font-smoothing: antialiased;
+}
+
+.form-control,
+.form-select {
+  background-color: var(--field);
+  border-color: var(--line);
+}
+.form-control:focus,
+.form-select:focus {
+  border-color: var(--pick-line);
+  box-shadow: 0 0 0 3px color-mix(in srgb, var(--pick-line) 18%, transparent);
+}
+.form-label {
+  font-weight: 500;
+  font-size: 14px;
+  margin-bottom: 6px;
+}
+.form-text {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+/* Brand button (navy), used for the main action on each screen */
+.btn-brand {
+  --bs-btn-color: #fff;
+  --bs-btn-bg: var(--navy);
+  --bs-btn-border-color: var(--navy);
+  --bs-btn-hover-color: #fff;
+  --bs-btn-hover-bg: var(--navy-hover);
+  --bs-btn-hover-border-color: var(--navy-hover);
+  --bs-btn-active-bg: var(--navy);
+  --bs-btn-active-border-color: var(--navy);
+  --bs-btn-active-color: #fff;
+  --bs-btn-disabled-bg: var(--navy);
+  --bs-btn-disabled-border-color: var(--navy);
+  font-weight: 600;
+  padding: 10px 14px;
+}
+.btn-quiet {
+  border: 0;
+  background: none;
+  color: var(--muted);
+  text-decoration: underline;
+  font-size: 14px;
+  padding: 0;
+}
+.btn-quiet:hover {
+  color: var(--ink);
+}
+
+/* ---------- Page frame ---------- */
+.shell {
+  max-width: 560px;
+  margin: 0 auto;
+  padding: 16px 16px 48px;
+}
+.shell.narrow {
+  max-width: 420px;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+}
+.topbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  padding: 4px 0 16px;
+}
+.topbar img {
+  height: 40px;
+}
+.card-box {
+  background: var(--paper);
+  border: 1px solid var(--line);
+  border-radius: 16px;
+  box-shadow: var(--shadow);
+  padding: 22px 20px 24px;
+}
+.card-box + .card-box {
+  margin-top: 16px;
+}
+.logo-wide {
+  display: block;
+  width: 190px;
+  max-width: 70%;
+  margin: 2px auto 14px;
+}
+h1.title {
+  font-size: 22px;
+  font-weight: 700;
+  margin: 0;
+}
+h2.title {
+  font-size: 18px;
+  font-weight: 700;
+  margin: 0 0 4px;
+}
+.center {
+  text-align: center;
+}
+.sub {
+  color: var(--muted);
+  font-size: 14px;
+  margin: 2px 0 18px;
+}
+.call {
+  text-align: center;
+  font-size: 13px;
+  color: var(--muted);
+  margin: 16px 0 0;
+}
+.call a {
+  color: inherit;
+  font-weight: 600;
+}
+.test-note {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 6px 12px;
+  border-radius: 10px;
+  background: var(--warn-bg);
+  color: var(--warn);
+  text-align: center;
+  margin-bottom: 14px;
+}
+
+/* ---------- Big choice buttons (first time / returning, services) ---------- */
+.choices {
+  display: grid;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+.choice {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+  width: 100%;
+  text-align: left;
+  border: 1px solid var(--line);
+  background: var(--field);
+  color: var(--ink);
+  border-radius: 12px;
+  padding: 12px 14px;
+}
+.choice:hover {
+  border-color: var(--pick-line);
+}
+.choice.on {
+  border-color: var(--pick-line);
+  background: var(--pick);
+  box-shadow: inset 0 0 0 1px var(--pick-line);
+}
+.choice .icon {
+  font-size: 22px;
+  width: 32px;
+  text-align: center;
+  flex: none;
+}
+.choice b {
+  display: block;
+  font-size: 15px;
+}
+.choice small {
+  display: block;
+  font-size: 13px;
+  color: var(--muted);
+}
+.choices.row2 {
+  grid-template-columns: 1fr 1fr;
+}
+
+/* Small toggle chips (cut style, à la carte, deshed) */
+.chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+.chip {
+  border: 1px solid var(--line);
+  background: var(--field);
+  color: var(--ink);
+  border-radius: 999px;
+  padding: 6px 14px;
+  font-size: 14px;
+  font-weight: 500;
+}
+.chip.on {
+  border-color: var(--pick-line);
+  background: var(--pick);
+  color: var(--pick-line);
+  font-weight: 600;
+}
+
+/* ---------- Code boxes ---------- */
+.code-input {
+  font-size: 26px;
+  font-weight: 700;
+  letter-spacing: 0.5em;
+  text-align: center;
+  padding: 10px 0 10px 0.5em;
+}
+.sent-to {
+  background: var(--head);
+  border-radius: 10px;
+  padding: 10px 12px;
+  font-size: 14px;
+  margin-bottom: 16px;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+
+/* ---------- Steps ---------- */
+.steps {
+  display: flex;
+  gap: 6px;
+  margin-bottom: 16px;
+}
+.steps span {
+  flex: 1;
+  height: 4px;
+  border-radius: 4px;
+  background: var(--line);
+}
+.steps span.done {
+  background: var(--navy);
+}
+.step-label {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+.pup-block + .pup-block {
+  margin-top: 20px;
+  padding-top: 18px;
+  border-top: 1px solid var(--line);
+}
+.last-time {
+  font-size: 13px;
+  color: var(--muted);
+  margin: -2px 0 10px;
+}
+.last-time b {
+  color: var(--ink);
+}
+
+/* ---------- Calendar ---------- */
+.week {
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 6px;
+  margin-bottom: 6px;
+}
+.week-label {
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--muted);
+  margin: 10px 0 6px;
+}
+.day {
+  border: 1px solid var(--line);
+  background: var(--field);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 6px 2px;
+  line-height: 1.15;
+  text-align: center;
+}
+.day small {
+  display: block;
+  font-size: 11px;
+  color: var(--muted);
+}
+.day b {
+  display: block;
+  font-size: 17px;
+}
+.day:disabled {
+  background: transparent;
+  color: var(--gone);
+  border-style: dashed;
+}
+.day:disabled b {
+  font-weight: 500;
+}
+.day.on {
+  border-color: var(--pick-line);
+  background: var(--pick);
+  box-shadow: inset 0 0 0 1px var(--pick-line);
+}
+.times {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(92px, 1fr));
+  gap: 8px;
+}
+.time {
+  border: 1px solid var(--line);
+  background: var(--field);
+  color: var(--ink);
+  border-radius: 10px;
+  padding: 9px 4px;
+  font-weight: 600;
+}
+.time.on {
+  border-color: var(--pick-line);
+  background: var(--pick);
+  color: var(--pick-line);
+  box-shadow: inset 0 0 0 1px var(--pick-line);
+}
+.or {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  color: var(--muted);
+  font-size: 13px;
+  margin: 18px 0 12px;
+}
+.or::before,
+.or::after {
+  content: '';
+  flex: 1;
+  height: 1px;
+  background: var(--line);
+}
+.call-note {
+  font-size: 13px;
+  color: var(--muted);
+  background: var(--head);
+  border-radius: 10px;
+  padding: 10px 12px;
+  margin-top: 16px;
+}
+.call-note a {
+  color: inherit;
+  font-weight: 600;
+}
+
+/* ---------- Home ---------- */
+.pup {
+  display: flex;
+  gap: 12px;
+  align-items: center;
+}
+.pup + .pup {
+  margin-top: 12px;
+  padding-top: 12px;
+  border-top: 1px solid var(--line);
+}
+.pup-face {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  background: var(--head);
+  display: grid;
+  place-items: center;
+  font-size: 22px;
+  flex: none;
+}
+.pup-info {
+  flex: 1;
+  min-width: 0;
+}
+.pup-info b {
+  display: block;
+}
+.pup-info small {
+  display: block;
+  color: var(--muted);
+  font-size: 13px;
+}
+.request {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  padding: 12px 14px;
+  background: var(--field);
+}
+.request + .request {
+  margin-top: 10px;
+}
+.request.cancelled {
+  opacity: 0.6;
+}
+.request-when {
+  font-weight: 600;
+}
+.request-what {
+  font-size: 14px;
+  color: var(--muted);
+}
+.status {
+  font-size: 12px;
+  font-weight: 600;
+  padding: 2px 10px;
+  border-radius: 999px;
+  white-space: nowrap;
+}
+.status.requested {
+  background: var(--warn-bg);
+  color: var(--warn);
+}
+.status.confirmed {
+  background: var(--ok-bg);
+  color: var(--ok);
+}
+.status.cancelled {
+  background: var(--head);
+  color: var(--muted);
+}
+.request-actions {
+  display: flex;
+  gap: 16px;
+  margin-top: 8px;
+}
+
+/* ---------- Review ---------- */
+.review dt {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--muted);
+}
+.review dd {
+  margin: 0 0 12px;
+}
+.done-mark {
+  font-size: 44px;
+  text-align: center;
+  margin-bottom: 4px;
+}
+.file-picked {
+  font-size: 13px;
+  color: var(--ok);
+  margin-top: 6px;
+}
+
+/* The logo has a white version for the dark theme */
+[data-bs-theme='dark'] .logo-for-light,
+[data-bs-theme='light'] .logo-for-dark {
+  display: none;
+}

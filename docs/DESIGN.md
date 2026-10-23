@@ -24,6 +24,26 @@ owners in October 2026; change this file when a decision changes.
 - **Grooming first, walks second.** The staff site handles grooming today; walks
   need their own staff screen first. Walks will use time windows.
 
+## Screens
+- **Sign-in (mockup A):** "Returning pup" or "First time here", then email, then the
+  6-digit code. Horizontal logo for now (white version in dark mode); the owners
+  may swap it later.
+- **First time:** owner first and last name, phone, pup name, breed, **vaccine
+  records** (PDF or photo, required) and an optional pup photo.
+- **Returning:** the same without vaccine records. The desk links the pup to
+  its record on the staff site; until then the pup says "We're matching your
+  pup to our records". The client never sees anything from our records until
+  the desk links them.
+- **No prices,** except a linked returning pup shows its last visit and price
+  ("Last time: Full groom + Summer cut · $110").
+- **Booking, 4 steps:** service (one pup, or two siblings) → day and time (8 weeks
+  ahead, Tuesday to Saturday; "I'm flexible" any time that day / any day and time)
+  → notes for Flor and an optional photo → review and send.
+- **Home:** the client's bookings with their status (Waiting for the desk,
+  Confirmed, Cancelled), their pups, and "+ Add a pup". Clients can cancel a
+  request; to change one they cancel and book again, or call.
+- Light and dark follow the phone's own setting; colors match the staff site.
+
 ## Which grooming times are offered
 The rules live in `src/lib/availability.js`, and each example below is a test in
 `src/lib/availability.test.js`.
