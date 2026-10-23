@@ -9,8 +9,8 @@ const KINDS = [
 ]
 
 // Mockup A: choose returning or first time, type an email, then the 6-digit code.
-// onSignIn(email) signs in and says whether the account already has pups.
-export default function SignIn({ onSignIn, onDone }) {
+// onSendCode(email) and onVerify(email, code) return { error } when something's wrong.
+export default function SignIn({ onSendCode, onVerify, onDone }) {
   const [kind, setKind] = useState('returning')
   const [email, setEmail] = useState('')
   const [code, setCode] = useState('')
@@ -18,10 +18,17 @@ export default function SignIn({ onSignIn, onDone }) {
   const [error, setError] = useState('')
   const [busy, setBusy] = useState(false)
 
-  const sendCode = (e) => {
-    e.preventDefault()
+  const sendCode = async (e) => {
+    e?.preventDefault()
     if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
       setError('Enter your email, like name@example.com.')
+      return
+    }
+    setBusy(true)
+    const { error: problem } = await onSendCode(email)
+    setBusy(false)
+    if (problem) {
+      setError(problem)
       return
     }
     setError('')
@@ -29,16 +36,20 @@ export default function SignIn({ onSignIn, onDone }) {
     setStep('code')
   }
 
-  const checkCode = (e) => {
+  const checkCode = async (e) => {
     e.preventDefault()
     if (!/^\d{6}$/.test(code)) {
       setError('Enter the 6 numbers from the email.')
       return
     }
     setBusy(true)
-    const result = onSignIn(email)
+    const { error: problem } = await onVerify(email, code)
     setBusy(false)
-    onDone(kind, result)
+    if (problem) {
+      setError(problem)
+      return
+    }
+    onDone(kind)
   }
 
   if (step === 'code') {
@@ -74,7 +85,7 @@ export default function SignIn({ onSignIn, onDone }) {
             Continue
           </button>
           <div className="d-flex justify-content-between mt-3">
-            <button type="button" className="btn-quiet" onClick={() => setCode('')}>
+            <button type="button" className="btn-quiet" disabled={busy} onClick={() => sendCode()}>
               Send a new code
             </button>
             <button type="button" className="btn-quiet" onClick={() => setStep('start')}>
@@ -119,8 +130,8 @@ export default function SignIn({ onSignIn, onDone }) {
         />
         <p className="form-text mb-3">We'll email you a 6-digit code. No password needed.</p>
         {error && <p className="text-danger small" role="alert">{error}</p>}
-        <button type="submit" className="btn btn-brand w-100">
-          Send me a code
+        <button type="submit" className="btn btn-brand w-100" disabled={busy}>
+          {busy ? 'Sending…' : 'Send me a code'}
         </button>
         <CallUs />
       </form>

@@ -3,12 +3,12 @@ import { TEST_MODE } from '../lib/contact.js'
 import { formatLong, formatTime, todayKey } from '../lib/dates.js'
 import { formatPrice, serviceSummary } from '../lib/services.js'
 
-const STATUS = { requested: 'Waiting for the desk', confirmed: 'Confirmed', cancelled: 'Cancelled' }
+const STATUS = { requested: 'Waiting for the desk', confirmed: 'Confirmed', declined: 'Not available', cancelled: 'Cancelled' }
 
 // The signed-in page: the client's pups and their requests.
 export default function Home({ account, onBook, onAddPup, onCancelRequest, onTestLink, onTestConfirm }) {
   const today = todayKey()
-  const upcoming = account.requests.filter((r) => r.status !== 'cancelled' && (!r.date || r.date >= today))
+  const upcoming = account.requests.filter((r) => ['requested', 'confirmed'].includes(r.status) && (!r.date || r.date >= today))
   const past = account.requests.filter((r) => !upcoming.includes(r)).slice(-5).reverse()
   const pupName = (id) => account.pups.find((p) => p.id === id)?.name
 
@@ -84,11 +84,12 @@ export default function Home({ account, onBook, onAddPup, onCancelRequest, onTes
         <section className="card-box">
           <h2 className="title mb-3">Past and cancelled</h2>
           {past.map((r) => (
-            <div key={r.id} className={`request ${r.status === 'cancelled' ? 'cancelled' : ''}`}>
+            <div key={r.id} className={`request ${['cancelled', 'declined'].includes(r.status) ? 'cancelled' : ''}`}>
               <div className="d-flex justify-content-between gap-2">
                 <span className="request-when">{when(r)}</span>
-                <span className={`status ${r.status}`}>{r.status === 'cancelled' ? 'Cancelled' : 'Done'}</span>
+                <span className={`status ${r.status}`}>{r.status === 'confirmed' ? 'Done' : STATUS[r.status]}</span>
               </div>
+              {r.deskNote && <div className="request-what">From the desk: {r.deskNote}</div>}
               <div className="request-what">{r.pups.map((p) => `${pupName(p.pupId)}: ${serviceSummary(p)}`).join(' · ')}</div>
             </div>
           ))}

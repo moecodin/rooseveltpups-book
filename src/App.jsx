@@ -15,10 +15,12 @@ export default function App() {
   const [kind, setKind] = useState(null)
   const [screen, setScreen] = useState('home')
 
+  if (store.loading) return <p className="call mt-5">Loading…</p>
   if (!account) {
     return (
       <SignIn
-        onSignIn={store.signIn}
+        onSendCode={store.sendCode}
+        onVerify={store.verifyCode}
         onDone={(chosenKind) => {
           setKind(chosenKind)
           setScreen('home')
@@ -33,14 +35,29 @@ export default function App() {
   }
 
   let page
-  if (!account.pups.length) {
+  if (account.isStaff) {
+    page = (
+      <div className="card-box center">
+        <h1 className="title">This is a staff account</h1>
+        <p className="sub">Staff book on the grooming sheet. To book as a client, sign out and use your personal email.</p>
+      </div>
+    )
+  } else if (account.loadError) {
+    page = (
+      <div className="card-box center">
+        <h1 className="title">Something went wrong</h1>
+        <p className="sub">We couldn't load your pups. Please refresh the page, or call us to book.</p>
+      </div>
+    )
+  } else if (!account.pups.length) {
     page = (
       <PupForm
         account={account}
         kind={kind}
-        onSave={(pup) => {
-          store.addPup(pup)
-          go('book')
+        onSave={async (pup) => {
+          const result = await store.addPup(pup)
+          if (!result.error) go('book')
+          return result
         }}
       />
     )
@@ -49,9 +66,10 @@ export default function App() {
       <Book
         account={account}
         timesFor={store.timesFor}
-        onSend={(request) => {
-          store.sendRequest(request)
-          go('sent')
+        onSend={async (request) => {
+          const result = await store.sendRequest(request)
+          if (!result.error) go('sent')
+          return result
         }}
         onCancel={() => go('home')}
       />
@@ -60,9 +78,10 @@ export default function App() {
     page = (
       <PupForm
         account={account}
-        onSave={(pup) => {
-          store.addPup(pup)
-          go('home')
+        onSave={async (pup) => {
+          const result = await store.addPup(pup)
+          if (!result.error) go('home')
+          return result
         }}
         onCancel={() => go('home')}
       />

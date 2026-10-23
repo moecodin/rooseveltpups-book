@@ -2,8 +2,8 @@ import { useState } from 'react'
 
 const MAX_MB = 10
 
-// A file box for vaccine records and pup photos. In test mode only the file's
-// name is kept; once connected, the file goes to private Supabase storage.
+// A file box for vaccine records and pup photos. The file goes to the client's
+// own folder in private storage (test mode keeps only its name).
 export default function FilePick({ id, label, hint, accept, file, onPick }) {
   const [error, setError] = useState('')
 
@@ -21,7 +21,7 @@ export default function FilePick({ id, label, hint, accept, file, onPick }) {
       return
     }
     setError('')
-    onPick({ name: chosen.name, size: chosen.size, type: chosen.type })
+    onPick({ file: chosen, name: chosen.name, size: chosen.size, type: chosen.type })
   }
 
   return (

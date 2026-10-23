@@ -13,7 +13,7 @@ How it works and why: [docs/DESIGN.md](docs/DESIGN.md).
 ## Status
 - [x] Grooming availability rules, with tests (`src/lib/availability.js`)
 - [x] Booking screens (React + Vite + Bootstrap, like the staff site), in test mode
-- [ ] Client sign-in with an email code (Supabase)
+- [x] Connected to Supabase: email-code sign-in, pups, uploads, requests (needs the email settings below)
 - [ ] Requests appear on the staff site; desk confirms and links each client to their dog
 - [ ] Confirmation emails from booking@rooseveltpups.com (Resend)
 - [ ] "I'm flexible" discount
@@ -28,7 +28,8 @@ npm run dev     # starts the site at http://localhost:5173
 npm test        # checks the booking rules against the owners' examples
 ```
 
-Until it's connected to Supabase the site runs in **test mode**: a made-up
+To use the real database, copy `.env.example` to `.env.local` and fill in the
+same two values as the staff site. With them empty, the site runs in **test mode**: a made-up
 schedule, any 6-digit code signs you in, nothing is emailed, and everything is
 saved only in your browser ("Start over" at the bottom erases it). Buttons marked
 "Test:" pretend to be the front desk linking a pup or confirming a request.
@@ -38,7 +39,8 @@ saved only in your browser ("Start over" at the bottom erases it). Buttons marke
 |---|---|
 | `src/App.jsx` | Which screen to show |
 | `src/screens/` | `SignIn` (mockup A), `PupForm` (first time / returning), `Book` (the 4 steps), `Home` |
-| `src/state/useStore.js` | All the data and every way it can change. The only file that will talk to Supabase |
+| `src/state/useRemoteStore.js` | All the data and every way it can change, in Supabase. The only file that talks to it |
+| `src/state/useTestStore.js` | The same, for test mode (saved in this browser) |
 | `src/lib/availability.js` | Which times clients are offered (with tests) |
 | `src/lib/` | Dates, services, contact details |
 | `src/data/sampleData.js` | Made-up schedule and staff records for test mode |
@@ -48,3 +50,14 @@ saved only in your browser ("Start over" at the bottom erases it). Buttons marke
 Same as the staff site: keep data minimal (dog name, owner last name, breed,
 phone, email, service, date/time, notes), no addresses, made-up test data only
 during development, and never commit secret keys.
+
+## Supabase settings this site needs
+In the Supabase dashboard (the same project as the staff site):
+- **Authentication → Emails → SMTP Settings:** custom SMTP through Resend
+  (host `smtp.resend.com`, port `465`, username `resend`, password = a Resend API
+  key), sender `booking@rooseveltpups.com`, name "Roosevelt Pups".
+- **Authentication → Emails → Templates:** "Magic Link" and "Confirm signup"
+  show the code with `{{ .Token }}`.
+- **Authentication → Sign In / Providers → Email:** OTP length 6, OTP expiry 600 seconds.
+- **Allow new users to sign up: on**, only once the staff site has the Requests
+  screen (new accounts are clients and see nothing of the staff data; update 007).

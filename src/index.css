@@ -502,3 +502,7 @@ h2.title {
 [data-bs-theme='light'] .logo-for-dark {
   display: none;
 }
+.status.declined {
+  background: var(--head);
+  color: var(--muted);
+}

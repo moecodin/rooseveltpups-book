@@ -18,6 +18,7 @@ export default function PupForm({ account, kind: startKind, onSave, onCancel }) 
   const [vaccines, setVaccines] = useState(null)
   const [photo, setPhoto] = useState(null)
   const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
   const askOwner = !account.lastName
   const isNew = kind === 'new'
 
@@ -26,7 +27,7 @@ export default function PupForm({ account, kind: startKind, onSave, onCancel }) 
     setError('')
   }
 
-  const save = (e) => {
+  const save = async (e) => {
     e.preventDefault()
     const missing = [
       askOwner && !form.firstName.trim() && 'your first name',
@@ -40,7 +41,10 @@ export default function PupForm({ account, kind: startKind, onSave, onCancel }) 
       setError(`Please add ${missing.join(', ').replace(/, ([^,]*)$/, ' and $1')}.`)
       return
     }
-    onSave({ ...form, isNew, vaccines, photo })
+    setBusy(true)
+    const { error: problem } = (await onSave({ ...form, isNew, vaccines, photo })) || {}
+    setBusy(false)
+    if (problem) setError(problem)
   }
 
   return (
@@ -107,8 +111,8 @@ export default function PupForm({ account, kind: startKind, onSave, onCancel }) 
       <FilePick id="photo" label="A photo of your pup (optional)" hint="Helps us say hi by name." accept="image/*" file={photo} onPick={setPhoto} />
 
       {error && <p className="text-danger small" role="alert">{error}</p>}
-      <button type="submit" className="btn btn-brand w-100">
-        {isNew ? 'Save and book a groom' : 'Continue'}
+      <button type="submit" className="btn btn-brand w-100" disabled={busy}>
+        {busy ? 'Saving…' : isNew ? 'Save and book a groom' : 'Continue'}
       </button>
       {onCancel && (
         <button type="button" className="btn-quiet d-block mx-auto mt-3" onClick={onCancel}>

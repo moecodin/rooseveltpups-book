@@ -18,6 +18,7 @@ export default function Book({ account, timesFor, onSend, onCancel }) {
   const [note, setNote] = useState('')
   const [photo, setPhoto] = useState(null)
   const [error, setError] = useState('')
+  const [busy, setBusy] = useState(false)
 
   // What each chosen pup is booked for, the way the staff site stores it.
   const picks = chosen.map((id) => ({ pupId: id, ...toBooking(choices[id] || {}) }))
@@ -52,15 +53,18 @@ export default function Book({ account, timesFor, onSend, onCancel }) {
     else setStep(step - 1)
   }
 
-  const send = () => {
-    onSend({
+  const send = async () => {
+    setBusy(true)
+    const { error: problem } = (await onSend({
       pups: picks,
       date: flexible === 'any' ? null : date,
       time: flexible ? null : time,
       flexible,
       note: note.trim(),
       photo,
-    })
+    })) || {}
+    setBusy(false)
+    if (problem) setError(problem)
   }
 
   return (
@@ -123,8 +127,8 @@ export default function Book({ account, timesFor, onSend, onCancel }) {
             Next
           </button>
         ) : (
-          <button type="button" className="btn btn-brand flex-grow-1" onClick={send}>
-            Send request
+          <button type="button" className="btn btn-brand flex-grow-1" onClick={send} disabled={busy}>
+            {busy ? 'Sending…' : 'Send request'}
           </button>
         )}
       </div>
