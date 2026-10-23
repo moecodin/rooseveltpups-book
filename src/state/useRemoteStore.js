@@ -71,7 +71,7 @@ export function useRemoteStore() {
         note: r.note,
         status: r.status,
         deskNote: r.desk_note,
-        pups: r.booking_request_pups.map((rp) => ({ pupId: rp.pup_id, service: rp.service, addons: rp.addons, cut: rp.cut })),
+        pups: r.booking_request_pups.map((rp) => ({ pupId: rp.pup_id, service: rp.service, addons: rp.addons, cut: rp.cut, cutNote: rp.cut_note ?? '' })),
       })),
     })
     setBusy({
@@ -141,7 +141,7 @@ export function useRemoteStore() {
       const photoPath = await upload(uid, request.photo)
       if (photoPath?.error) return { error: "The photo didn't upload. Please try again, or leave it out." }
       const { error } = await supabase.rpc('send_booking_request', {
-        p_pups: request.pups.map((p) => ({ pup_id: p.pupId, service: p.service, addons: p.addons, cut: p.cut || '' })),
+        p_pups: request.pups.map((p) => ({ pup_id: p.pupId, service: p.service, addons: p.addons, cut: p.cut || '', cut_note: p.cutNote || '' })),
         p_date: request.date,
         p_time: request.time,
         p_flexible: request.flexible || '',

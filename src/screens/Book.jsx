@@ -23,6 +23,7 @@ export default function Book({ account, timesFor, onSend, onCancel }) {
   // What each chosen pup is booked for, the way the staff site stores it.
   const picks = chosen.map((id) => ({ pupId: id, ...toBooking(choices[id] || {}) }))
   const picksReady = chosen.length > 0 && chosen.every((id) => toBooking(choices[id] || {}))
+  const otherWithoutNote = chosen.some((id) => choices[id]?.main === 'full' && choices[id]?.cut === 'other' && !choices[id]?.cutNote?.trim())
 
   const resetWhen = () => {
     setDate(null)
@@ -42,6 +43,7 @@ export default function Book({ account, timesFor, onSend, onCancel }) {
 
   const next = () => {
     if (step === 0 && !picksReady) return setError(chosen.length ? 'Pick a service for each pup.' : 'Pick which pup is coming.')
+    if (step === 0 && otherWithoutNote) return setError('Tell us the haircut you\'d like in the haircut notes.')
     if (step === 1 && !(time != null || flexible)) return setError('Pick a time, or tap "I\'m flexible".')
     setError('')
     setStep(step + 1)
@@ -181,7 +183,20 @@ function ServiceStep({ pups, chosen, choices, onToggle, onChoice }) {
                     </button>
                   ))}
                 </div>
-                <p className="form-text">Not sure? Leave it, and Flor will ask at drop-off.</p>
+                <label className="form-label mt-2" htmlFor={`cut-note-${id}`}>
+                  Haircut notes {choice.cut === 'other' ? '' : '(optional)'}
+                </label>
+                <textarea
+                  id={`cut-note-${id}`}
+                  className="form-control mb-1"
+                  rows={2}
+                  maxLength={200}
+                  value={choice.cutNote || ''}
+                  onChange={(e) => onChoice(id, { cutNote: e.target.value })}
+                />
+                <p className="form-text">
+                  {choice.cut === 'other' ? 'Tell us the style, for example "teddy bear face, short body".' : 'Not sure? Leave it, and Flor will ask at drop-off.'}
+                </p>
               </>
             )}
             {choice.main === 'bath' && (

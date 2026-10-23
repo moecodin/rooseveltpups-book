@@ -33,6 +33,8 @@ export const CUT_STYLES = {
   summer: 'Summer cut',
   half: 'Half-off',
   light: 'Light trim',
+  puppy: 'Puppy cut',
+  other: 'Other',
 }
 
 export const DESHED_EXTRA = 30 // deshedding adds about half an hour
@@ -43,15 +45,16 @@ const addonLabel = (value) => (value === 'deshed' ? 'Deshed' : A_LA_CARTE[value]
 // Quick-service picks become the first one as the service and the rest as add-ons
 // ("Nails only + Anal glands"), like the desk books them.
 export function toBooking(choice) {
-  if (choice.main === 'full') return { service: 'full', addons: [], cut: choice.cut || '' }
+  if (choice.main === 'full') return { service: 'full', addons: [], cut: choice.cut || '', cutNote: (choice.cutNote || '').trim() }
   if (choice.main === 'bath') return { service: 'bath', addons: choice.deshed ? ['deshed'] : [], cut: '' }
   const [first, ...rest] = Object.keys(A_LA_CARTE).filter((k) => choice.quick?.includes(k))
   return first ? { service: first, addons: rest, cut: '' } : null
 }
 
-// "Full groom + Summer cut", "Nails only + Anal glands"
-export function serviceSummary({ service, addons = [], cut }) {
-  return [SERVICES[service], ...addons.map(addonLabel), cut ? CUT_STYLES[cut] : null].filter(Boolean).join(' + ')
+// "Full groom + Summer cut", "Nails only + Anal glands", "Full groom + Other (teddy face)"
+export function serviceSummary({ service, addons = [], cut, cutNote }) {
+  const style = cut ? `${CUT_STYLES[cut]}${cutNote ? ` (${cutNote})` : ''}` : cutNote ? `Haircut: ${cutNote}` : null
+  return [SERVICES[service], ...addons.map(addonLabel), style].filter(Boolean).join(' + ')
 }
 
 export function formatPrice(price) {
