@@ -1,0 +1,28 @@
+# Netlify settings for the client booking site (book.rooseveltpups.com).
+# Netlify reads this file on every deploy from GitHub.
+
+[build]
+  # The time rules are checked first; if a check fails, the old site stays up.
+  command = "npm test && npm run build"
+  publish = "dist"
+  # Skip the build (and save deploy credits) when a push changes nothing that
+  # ends up in the website, e.g. only docs/, mockups/ or email-templates/.
+  # "git diff --quiet" exits 0 when those files are unchanged, which tells Netlify to skip.
+  ignore = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- src public index.html package.json package-lock.json vite.config.js netlify.toml"
+
+[build.environment]
+  NODE_VERSION = "22"
+
+# The whole site is one page; send any address back to it.
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Public site (Google may list it), but never shown inside other sites.
+    X-Frame-Options = "DENY"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
