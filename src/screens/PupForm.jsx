@@ -82,7 +82,7 @@ export default function PupForm({ account, kind: startKind, onSave, onCancel }) 
             </div>
           </div>
           <label className="form-label" htmlFor="phone">Phone</label>
-          <input id="phone" className="form-control" type="tel" inputMode="tel" autoComplete="tel" placeholder="000-000-0000" value={form.phone} onChange={set('phone')} />
+          <input id="phone" className="form-control" type="tel" inputMode="tel" autoComplete="tel" placeholder="(000) 000-0000" value={form.phone} onChange={set('phone')} />
           <p className="form-text mb-3">{isNew ? 'So we can call when your pup is ready.' : 'The number we have on file for you.'}</p>
         </>
       )}
@@ -124,10 +124,12 @@ export default function PupForm({ account, kind: startKind, onSave, onCancel }) 
   )
 }
 
-// Shows the number as 212-555-0100 while it's typed (US numbers; a leading 1 is dropped).
+// Shows the number as (212) 555-0100 while it's typed (US numbers; a leading 1 is dropped).
+// Same as the staff site (rooseveltpups/src/lib/phone.js).
 function formatPhone(text) {
   const d = text.replace(/\D/g, '').replace(/^1(?=\d{10})/, '').slice(0, 10)
-  if (d.length <= 3) return d
-  if (d.length <= 6) return `${d.slice(0, 3)}-${d.slice(3)}`
-  return `${d.slice(0, 3)}-${d.slice(3, 6)}-${d.slice(6)}`
+  if (!d) return ''
+  if (d.length <= 3) return `(${d}`
+  if (d.length <= 6) return `(${d.slice(0, 3)}) ${d.slice(3)}`
+  return `(${d.slice(0, 3)}) ${d.slice(3, 6)}-${d.slice(6)}`
 }
